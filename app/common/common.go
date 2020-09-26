@@ -17,7 +17,7 @@ func CreatePostgresDB() (*db.RequestStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	postgresClient.DropTable(&models.Request{}) // WRN!
+	// postgresClient.DropTable(&models.Request{}) // WRN!
 	postgresClient.AutoMigrate(&models.Request{})
 	return &db.RequestStore{DB: postgresClient}, nil
 }

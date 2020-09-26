@@ -9,6 +9,10 @@ import (
 	"net/http"
 )
 
+// TODO: move to config
+const ProxyCertPath string = "files/server.pem"
+const ProxyKeyPath string = "files/server.key"
+
 func main() {
 	store, err := common.CreatePostgresDB()
 	if err != nil {
@@ -27,8 +31,10 @@ func main() {
 				log.Println(err)
 			}
 			if req.Method == http.MethodConnect {
+				log.Println("HandleTunneling for ", req.RequestURI)
 				common.HandleTunneling(w, req)
 			} else {
+				log.Println("HandleHTTP for ", req.RequestURI)
 				common.HandleHTTP(w, req)
 			}
 		}),
@@ -36,5 +42,5 @@ func main() {
 	}
 
 	log.Fatal(server.ListenAndServe())
-	//log.Fatal(server.ListenAndServeTLS(pemPath, keyPath)) // http
+	//log.Fatal(server.ListenAndServeTLS(ProxyCertPath, ProxyKeyPath))
 }

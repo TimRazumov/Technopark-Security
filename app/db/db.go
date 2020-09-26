@@ -16,18 +16,17 @@ func (store *RequestStore) Set(req models.Request) error {
 	return nil
 }
 
-func (store *RequestStore) GetByProtocol(protocol string, limit uint) ([]models.Request, error) {
+func (store *RequestStore) Get(limit uint) ([]models.Request, error) {
 	var requests []models.Request
-	if err := store.DB.Limit(limit).Order("id desc").
-		Where("protocol = ?", protocol).Find(&requests).Error; err != nil {
+	if err := store.DB.Limit(limit).Order("id desc").Find(&requests).Error; err != nil {
 		return nil, err
 	}
 	return requests, nil
 }
 
-func (store *RequestStore) GetByID(id uint) (models.Request, error) {
+func (store *RequestStore) GetByID(id int) (models.Request, error) {
 	var request models.Request
-	if err := store.DB.Where("id = ?", id).Find(&request).Error; err != nil {
+	if err := store.DB.Where("id = ?", id).First(&request).Error; err != nil {
 		return models.Request{}, err
 	}
 	return request, nil
